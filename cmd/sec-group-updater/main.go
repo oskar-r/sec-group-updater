@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"strings"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -25,12 +26,21 @@ func main() {
 	flag.BoolVar(&deleteFlag, "delete", true, "delete ingress rule with description tag before setting new")
 	flag.Parse()
 	securityGroups := strings.Split(sg, ",")
+	if len(securityGroups) == 0 {
+		fmt.Printf("No security groups provided --sec-groups flag\n")
+		os.Exit(-1)
+	}
+	if tag == "" {
+		fmt.Print("No tag provided user the --tag flag\n")
+		os.Exit(-1)
+	}
 
 	//Using https://api.ipify.org to get your IP-address
 	ip, err := findMyIP()
 	if err != nil {
 		log.Fatalf("Error while fetching IP-address %+v", err)
 	}
+
 	fmt.Printf("Update rules with CIDR %s/32\n", ip)
 
 	//Create session and fetch all security groups connected to the project. Using credentials in ~.aws/credentials

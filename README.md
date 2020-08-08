@@ -15,7 +15,7 @@ Usage of ./sec-group-updater:
         description tag for ingress rule to be added
 ```
 
-### Build 
+### Install
 ```shell
-% go build .
+% go install ./...
 ```

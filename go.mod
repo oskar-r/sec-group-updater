@@ -1,4 +1,4 @@
-module sec-group-updater
+module github.com/oskar-r/sec-group-updater
 
 go 1.12
 
