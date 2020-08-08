@@ -1,10 +1,9 @@
 ## sec-group-updater
-This is a small utility program updating AWS ingress rules with your current IP-address.
+This is a small utility program updating AWS ingress rules across multiple security groups with your current IP-address.
 
 ### Example use
-
-```bash
-$/>sec-group-updater --help
+```shell
+% sec-group-updater --help
 Usage of ./sec-group-updater:
   -delete
         delete ingress rule with description tag before setting new (default true)
@@ -16,3 +15,7 @@ Usage of ./sec-group-updater:
         description tag for ingress rule to be added
 ```
 
+### Build 
+```shell
+% go build .
+```
