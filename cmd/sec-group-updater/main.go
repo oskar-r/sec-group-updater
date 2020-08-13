@@ -42,10 +42,9 @@ func main() {
 	if err != nil {
 		log.Fatalf("[ERROR] %+v", err)
 	}
-
 	//looking for security groups that match the provided names. if a match is found current ingress rules is deleted and a new one is created with your new ip
 	for _, v := range sgs {
-		if inArray(aws.StringValue(v.GroupName), securityGroups) || len(securityGroups) == 0 {
+		if inArray(aws.StringValue(v.GroupName), securityGroups) || (len(securityGroups) == 1 && securityGroups[0] == "") {
 			if deleteFlag {
 				if err := deleteIPRange(v.GroupName, tag, int64(port), svc, v.IpPermissions); err != nil {
 					log.Fatalf("Error while deleting ip-range %+v", err)
