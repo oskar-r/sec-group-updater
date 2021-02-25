@@ -24,7 +24,7 @@ func main() {
 	flag.Parse()
 	securityGroups := strings.Split(sg, ",")
 	if tag == "" {
-		fmt.Print("No tag provided user the --tag flag\n")
+		fmt.Print("No tag provided use the --tag flag\n")
 		os.Exit(-1)
 	}
 
@@ -42,6 +42,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("[ERROR] %+v", err)
 	}
+
 	//looking for security groups that match the provided names. if a match is found current ingress rules is deleted and a new one is created with your new ip
 	for _, v := range sgs {
 		if inArray(aws.StringValue(v.GroupName), securityGroups) || (len(securityGroups) == 1 && securityGroups[0] == "") {
@@ -50,8 +51,12 @@ func main() {
 					log.Fatalf("Error while deleting ip-range %+v", err)
 				}
 			}
-			if err := auth(ip, int64(port), v.GroupName, svc); err != nil {
-				log.Fatalf("Error while adding ip-range %+v", err)
+			if err := auth(ip, int64(port), v.GroupName, svc, tag); err != nil {
+				if !strings.Contains(err.Error(), "InvalidPermission.Duplicate") {
+					log.Fatalf("Error while adding ip-range %+v", err)
+				} else {
+					fmt.Printf("Rule %s %d already exist", aws.StringValue(v.GroupName), port)
+				}
 			}
 		}
 	}

@@ -60,7 +60,7 @@ func deAuth(groupName, cidrIP *string, port int64, svc *ec2.EC2) error {
 	return nil
 }
 
-func auth(ip string, port int64, groupName *string, svc *ec2.EC2) error {
+func auth(ip string, port int64, groupName *string, svc *ec2.EC2, tag string) error {
 	_, err := svc.AuthorizeSecurityGroupIngress(&ec2.AuthorizeSecurityGroupIngressInput{
 		GroupName: groupName,
 		IpPermissions: []*ec2.IpPermission{
@@ -72,7 +72,7 @@ func auth(ip string, port int64, groupName *string, svc *ec2.EC2) error {
 				SetToPort(port).
 				SetIpRanges([]*ec2.IpRange{
 					{
-						Description: aws.String("oskar mobile"),
+						Description: aws.String(tag),
 						CidrIp:      aws.String(ip + "/32"),
 					},
 				}),
